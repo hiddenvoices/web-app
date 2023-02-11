@@ -1,0 +1,13 @@
+<div>
+  <app-scrape (scrapedContentEvent)="updateScrapedContent($event)"></app-scrape>
+</div>
+<div style="margin-top: 1em">
+  <app-extract
+    [name]="name"
+    [scrapedContent]="scrapedContent"
+    (extractedTripletsEvent)="updateTriples($event)"
+  ></app-extract>
+</div>
+<div style="margin-top: 1em">
+  <app-summarize [name]="name" [triples]="triples"></app-summarize>
+</div>
