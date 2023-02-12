@@ -13,6 +13,7 @@ export class ScrapeComponent {
   name: string = '';
   content: string = '';
   scrapeData() {
+    this.wikipediaGenerationService.incrementServiceCounter();
     this.wikipediaGenerationService.scrape(this.name).subscribe({
       next: (response: any) => {
         this.content = response['content'];
@@ -21,6 +22,8 @@ export class ScrapeComponent {
           content: this.content,
         });
       },
+      error: () => this.wikipediaGenerationService.decrementServiceCounter(),
+      complete: () => this.wikipediaGenerationService.decrementServiceCounter(),
     });
   }
 }

@@ -14,10 +14,14 @@ export class SummarizeComponent {
   summarizedContent: string = '';
 
   summarizeTriples() {
+    this.wikipediaGenerationService.incrementServiceCounter();
     this.wikipediaGenerationService
       .summarize(this.name, this.triples)
       .subscribe({
         next: (response: any) => (this.summarizedContent = response['content']),
+        error: () => this.wikipediaGenerationService.decrementServiceCounter(),
+        complete: () =>
+          this.wikipediaGenerationService.decrementServiceCounter(),
       });
   }
 }

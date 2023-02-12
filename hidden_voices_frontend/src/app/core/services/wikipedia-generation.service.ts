@@ -1,11 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WikipediaGenerationService {
-  constructor(private httpClient: HttpClient) {}
+  private serviceCounter: BehaviorSubject<number>;
+
+  constructor(private httpClient: HttpClient) {
+    this.serviceCounter = new BehaviorSubject<number>(0);
+  }
 
   BACKEND_URL = 'http://127.0.0.1:8000/wiki';
 
@@ -30,5 +35,17 @@ export class WikipediaGenerationService {
       triples: triples,
     };
     return this.httpClient.post(`${this.BACKEND_URL}/summarize/`, body);
+  }
+
+  public incrementServiceCounter(): void {
+    this.serviceCounter.next(this.serviceCounter.value + 1);
+  }
+
+  public decrementServiceCounter(): void {
+    this.serviceCounter.next(this.serviceCounter.value - 1);
+  }
+
+  public getServiceCounter(): Observable<number> {
+    return this.serviceCounter.asObservable();
   }
 }

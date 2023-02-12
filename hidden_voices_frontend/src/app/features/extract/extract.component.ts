@@ -14,11 +14,15 @@ export class ExtractComponent {
   @Output() extractedTripletsEvent = new EventEmitter<string>();
 
   extractTriplets() {
+    this.wikipediaGenerationService.incrementServiceCounter();
     this.wikipediaGenerationService
       .extract(this.name, this.scrapedContent)
       .subscribe({
         next: (response: any) =>
           this.extractedTripletsEvent.emit(response['triples']),
+        error: () => this.wikipediaGenerationService.decrementServiceCounter(),
+        complete: () =>
+          this.wikipediaGenerationService.decrementServiceCounter(),
       });
   }
 }

@@ -10,6 +10,7 @@ import { SummarizeComponent } from './features/summarize/summarize.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ButtonModule } from 'primeng/button';
     InputTextModule,
     InputTextareaModule,
     ButtonModule,
+    ProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
