@@ -3,7 +3,7 @@ from googlesearch import search
 
 PROPERTIES = ['full name', 'date of birth', 'place of birth', 'date of death', 'place of death', 'nationality', 'citizenship', 'education',
               'occupation', 'years active', 'known for', 'field', 'work institutions', 'sub-specialities', 'research', 'notable works', 'website', 'awards']
-SKIPPED_WEBSITES = ['twitter.com', 'instagram.com',
+SKIPPED_WEBSITES = ['twitter.com', 'instagram.com', 'wikipedia',
                     'facebook.com', 'fb.com', 'linkedin.com', 'youtube.com', '.pdf']
 
 

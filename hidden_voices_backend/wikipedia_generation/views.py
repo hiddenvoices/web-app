@@ -50,7 +50,6 @@ class Extract(APIView):
             presence_penalty=0
         )
         triples = response['choices'][0]['text'].strip()
-        print(triples)
         triples = self.__format_triples(triples)
         return Response(data={'triples': triples}, status=status.HTTP_200_OK)
 
@@ -83,5 +82,5 @@ class Summarize(APIView):
             frequency_penalty=0,
             presence_penalty=0
         )
-        content = response['choices'][0]['text']
+        content = response['choices'][0]['text'].strip()
         return Response(data={'content': content}, status=status.HTTP_200_OK)
