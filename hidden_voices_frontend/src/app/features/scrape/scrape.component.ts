@@ -26,4 +26,10 @@ export class ScrapeComponent {
       complete: () => this.wikipediaGenerationService.decrementServiceCounter(),
     });
   }
+
+  nameChange() {
+    this.scrapedContentEvent.emit({
+      name: this.name,
+    });
+  }
 }

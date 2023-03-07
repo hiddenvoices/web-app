@@ -55,7 +55,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200',
+    '*',
 ]
 
 ROOT_URLCONF = 'hidden_voices_backend.urls'

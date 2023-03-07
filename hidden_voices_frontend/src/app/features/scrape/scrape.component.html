@@ -1,5 +1,11 @@
 <h2>Name</h2>
-<input pInputText type="text" class="outline-text" [(ngModel)]="name" />
+<input
+  pInputText
+  type="text"
+  class="outline-text"
+  [(ngModel)]="name"
+  (change)="nameChange()"
+/>
 <button
   pButton
   pRipple
