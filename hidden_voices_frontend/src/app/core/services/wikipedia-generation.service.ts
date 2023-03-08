@@ -12,7 +12,7 @@ export class WikipediaGenerationService {
     this.serviceCounter = new BehaviorSubject<number>(0);
   }
 
-  BACKEND_URL = 'http://127.0.0.1:8000/wiki';
+  BACKEND_URL = 'https://130.250.170.17/backend/wiki';
 
   public scrape(name: string) {
     const body = {
