@@ -25,7 +25,6 @@ SECRET_KEY = 'django-insecure-qag@1g^w^76y%z60ed0sh%5b(!4b@^fsek$!r7$8#u&(e6t!o)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,18 +51,14 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-ALLOWED_HOSTS = [
-    'http://localhost:4200',
-    'https://130.250.170.17',
-    'https://msc1-130-250-170-17.cloud.denvrdata.com'
-]
-# CORS_ORIGIN_ALLOW_ALL = True
+ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200',
-    'https://130.250.170.17',
-    'https://msc1-130-250-170-17.cloud.denvrdata.com'
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:4200',
+#     'https://130.250.170.17',
+#     'https://msc1-130-250-170-17.cloud.denvrdata.com'
+# ]
 
 ROOT_URLCONF = 'hidden_voices_backend.urls'
 
