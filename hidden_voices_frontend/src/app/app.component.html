@@ -1,18 +1,2 @@
 <p-menubar [model]="items"></p-menubar>
-<div>
-  <app-scrape (scrapedContentEvent)="updateScrapedContent($event)"></app-scrape>
-</div>
-<div style="margin-top: 1em">
-  <app-extract
-    [name]="name"
-    [scrapedContent]="scrapedContent"
-    (extractedTripletsEvent)="updateTriples($event)"
-  ></app-extract>
-</div>
-<div style="margin-top: 1em">
-  <app-summarize [name]="name" [triples]="triples"></app-summarize>
-</div>
-<ng-container *ngIf="activeServices">
-  <div class="overlay"></div>
-  <p-progressSpinner class="spinner" strokeWidth="4"></p-progressSpinner>
-</ng-container>
+<router-outlet></router-outlet>

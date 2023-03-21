@@ -9,37 +9,22 @@ import { MenuItem } from 'primeng/api';
 })
 export class AppComponent implements OnInit {
   title = 'hidden_voices_frontend';
-  name: string = '';
-  scrapedContent: string = '';
-  triples: string = '';
-  activeServices: number = 0;
   items: MenuItem[] = [];
 
   constructor(private wikipediaGenerationService: WikipediaGenerationService) {}
 
   ngOnInit() {
-    this.wikipediaGenerationService.getServiceCounter().subscribe((value) => {
-      this.activeServices = value;
-    });
-
     this.items = [
       {
         label: 'Scrape',
         icon: 'pi pi-fw pi-search',
+        routerLink: '/scrape',
       },
       {
         label: 'Generate',
         icon: 'pi pi-fw pi-pencil',
+        routerLink: '/generate',
       },
     ];
-  }
-
-  updateScrapedContent(event: any) {
-    this.name = event['name'];
-    this.scrapedContent = event['content'];
-  }
-
-  updateTriples(event: any) {
-    this.triples = event;
   }
 }
