@@ -1,1 +1,9 @@
-<p>generate works!</p>
+<p-carousel [value]="components" [numVisible]="2" [numScroll]="1">
+  <ng-template let-component pTemplate="item">
+    <div style="margin: 10px; height: 80vh">
+      <p-card [header]="component.title" [style]="{ height: '100%' }">
+        <app-generate-helper [component]="component.tag"></app-generate-helper>
+      </p-card>
+    </div>
+  </ng-template>
+</p-carousel>

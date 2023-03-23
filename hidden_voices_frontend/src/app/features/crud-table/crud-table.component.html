@@ -1,0 +1,157 @@
+<div class="card">
+  <p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+      <button
+        pButton
+        pRipple
+        label="New"
+        icon="pi pi-plus"
+        class="p-button-success p-mr-2"
+        (click)="openNew()"
+      ></button>
+      <button
+        pButton
+        pRipple
+        icon="pi pi-trash"
+        class="p-button-danger"
+        (click)="deleteSelectedItems()"
+        [disabled]="!selectedItems || !selectedItems.length"
+        style="margin-left: 5px"
+      ></button>
+    </ng-template>
+
+    <ng-template pTemplate="right">
+      <p-fileUpload
+        #fileUpload
+        mode="basic"
+        [auto]="true"
+        [maxFileSize]="1000000"
+        label="Import"
+        chooseLabel="Import"
+        class="p-mr-2 p-d-inline-block"
+        (uploadHandler)="loadCSV($event, fileUpload)"
+        [customUpload]="true"
+      ></p-fileUpload>
+      <button
+        pButton
+        pRipple
+        label="Export"
+        icon="pi pi-upload"
+        class="p-button-help"
+        style="margin-left: 5px"
+        (click)="exportToCSV()"
+      ></button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [value]="items"
+    [rows]="2"
+    [paginator]="true"
+    [(selection)]="selectedItems"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th>Text</th>
+        <th>Source</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="item"></p-tableCheckbox>
+        </td>
+        <td>
+          <textarea rows="5" cols="30" pInputTextarea style="resize: none">{{
+            item.text
+          }}</textarea>
+        </td>
+        <td>{{ item.source }}</td>
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-success p-mr-2"
+            (click)="editItem(item)"
+          ></button>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-warning"
+            (click)="deleteItem(item)"
+            style="margin-left: 5px"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{ items ? items.length : 0 }} items.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="itemDialog"
+  [style]="{ width: '450px' }"
+  header="Item Details"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="p-field">
+      <label for="text">Text</label>
+      <textarea
+        id="text"
+        pInputTextarea
+        [(ngModel)]="item.text"
+        required
+        rows="3"
+        cols="20"
+        [autoResize]="true"
+      ></textarea>
+    </div>
+    <div class="p-field">
+      <label for="source">Source</label>
+      <input
+        type="text"
+        pInputText
+        id="source"
+        [(ngModel)]="item.source"
+        required
+        autofocus
+      />
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="saveItem()"
+    ></button>
+  </ng-template>
+</p-dialog>

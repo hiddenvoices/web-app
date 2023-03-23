@@ -11,8 +11,6 @@ export class AppComponent implements OnInit {
   title = 'hidden_voices_frontend';
   items: MenuItem[] = [];
 
-  constructor(private wikipediaGenerationService: WikipediaGenerationService) {}
-
   ngOnInit() {
     this.items = [
       {
