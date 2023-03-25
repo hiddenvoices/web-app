@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { WikipediaGenerationService } from 'src/app/core/services/wikipedia-generation.service';
 
 @Component({
   selector: 'app-scraped-text',
@@ -6,30 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./scraped-text.component.css'],
 })
 export class ScrapedTextComponent {
-  items: any[] = [
-    {
-      text: 'ABCD',
-      source: 'abcd.com',
-    },
-    {
-      text: 'PQRS',
-      source: 'pqrs.com',
-    },
-    {
-      text: 'ABCD',
-      source: 'abcd.com',
-    },
-    {
-      text: 'PQRS',
-      source: 'pqrs.com',
-    },
-    {
-      text: 'ABCD',
-      source: 'abcd.com',
-    },
-    {
-      text: 'PQRS',
-      source: 'pqrs.com',
-    },
-  ];
+  items: any[] = [];
+  @Input() name: string = '';
+
+  constructor(private wikiService: WikipediaGenerationService) {}
+
+  generateFactoids() {
+    this.wikiService.extract(this.name, this.items);
+  }
 }

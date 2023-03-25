@@ -1,8 +1,16 @@
 <p-carousel [value]="components" [numVisible]="2" [numScroll]="1">
+  <ng-template pTemplate="header">
+    <div style="margin-left: 60px; margin-top: 10px">
+      <input type="text" pInputText placeholder="Name" [(ngModel)]="name" />
+    </div>
+  </ng-template>
   <ng-template let-component pTemplate="item">
-    <div style="margin: 10px; height: 80vh">
+    <div style="margin: 10px; height: 78vh">
       <p-card [header]="component.title" [style]="{ height: '100%' }">
-        <app-generate-helper [component]="component.tag"></app-generate-helper>
+        <app-generate-helper
+          [component]="component.tag"
+          [name]="name"
+        ></app-generate-helper>
       </p-card>
     </div>
   </ng-template>

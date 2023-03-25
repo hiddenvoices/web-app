@@ -7,4 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class GenerateHelperComponent {
   @Input() component: string = '';
+  @Input() name: string = '';
 }

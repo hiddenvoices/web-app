@@ -10,6 +10,7 @@ import { MenuItem } from 'primeng/api';
 export class AppComponent implements OnInit {
   title = 'hidden_voices_frontend';
   items: MenuItem[] = [];
+  name: string = '';
 
   ngOnInit() {
     this.items = [

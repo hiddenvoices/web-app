@@ -71,9 +71,14 @@
           <p-tableCheckbox [value]="item"></p-tableCheckbox>
         </td>
         <td>
-          <textarea rows="5" cols="30" pInputTextarea style="resize: none">{{
-            item.text
-          }}</textarea>
+          <textarea
+            rows="5"
+            cols="30"
+            pInputTextarea
+            style="resize: none"
+            readonly
+            >{{ item.text }}</textarea
+          >
         </td>
         <td>{{ item.source }}</td>
         <td>
@@ -94,11 +99,6 @@
           ></button>
         </td>
       </tr>
-    </ng-template>
-    <ng-template pTemplate="summary">
-      <div class="p-d-flex p-ai-center p-jc-between">
-        In total there are {{ items ? items.length : 0 }} items.
-      </div>
     </ng-template>
   </p-table>
 </div>
@@ -131,7 +131,6 @@
         id="source"
         [(ngModel)]="item.source"
         required
-        autofocus
       />
     </div>
   </ng-template>

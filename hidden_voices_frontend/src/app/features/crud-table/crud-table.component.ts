@@ -1,4 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 
@@ -7,8 +15,9 @@ import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
   templateUrl: './crud-table.component.html',
   styleUrls: ['./crud-table.component.css'],
 })
-export class CrudTableComponent implements OnInit {
+export class CrudTableComponent implements OnInit, OnChanges {
   @Input() items: any[] = [];
+  @Output() itemsChange = new EventEmitter<any>();
   itemDialog: boolean = false;
   item: any;
   selectedItems: any[] | null = null;
@@ -21,6 +30,14 @@ export class CrudTableComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    if (this.items.length) {
+      for (let i = 0; i < this.items.length; i++) {
+        this.items[i].id = this.createId();
+      }
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
     if (this.items.length) {
       for (let i = 0; i < this.items.length; i++) {
         this.items[i].id = this.createId();
@@ -55,6 +72,7 @@ export class CrudTableComponent implements OnInit {
           for (let i = 0; i < this.items.length; i++) {
             this.items[i].id = this.createId();
           }
+          this.itemsChange.emit(this.items);
         },
       });
     fileUpload.clear();
@@ -75,6 +93,7 @@ export class CrudTableComponent implements OnInit {
         this.items = this.items.filter(
           (val) => !this.selectedItems?.includes(val)
         );
+        this.itemsChange.emit(this.items);
         this.selectedItems = null;
         this.messageService.add({
           severity: 'success',
@@ -89,6 +108,7 @@ export class CrudTableComponent implements OnInit {
   editItem(item: any) {
     this.item = { ...item };
     this.itemDialog = true;
+    this.itemsChange.emit(this.items);
   }
 
   deleteItem(item: any) {
@@ -105,6 +125,7 @@ export class CrudTableComponent implements OnInit {
           detail: 'Item Deleted',
           life: 3000,
         });
+        this.itemsChange.emit(this.items);
       },
     });
   }
@@ -140,6 +161,7 @@ export class CrudTableComponent implements OnInit {
       this.items = [...this.items];
       this.itemDialog = false;
       this.item = {};
+      this.itemsChange.emit(this.items);
     }
   }
 
