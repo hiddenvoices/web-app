@@ -41,7 +41,8 @@ def filter_redundant_documents(df):
 
 
 def get_filtered_content(df):
+    # TODO: SEND JSON [{content, link}...]
     filtered_df = filter_redundant_documents(df)
-    content = '\n'.join(filtered_df['documents'])
-    content = re.sub(r'\n+', '\n', content).strip()
-    return content
+    # content = '\n'.join(filtered_df['documents'])
+    # content = re.sub(r'\n+', '\n', content).strip()
+    return filtered_df.to_dict(orient='records')

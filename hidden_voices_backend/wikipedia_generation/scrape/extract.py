@@ -2,6 +2,7 @@ from wikipedia_generation.utils import logger
 from bs4 import BeautifulSoup
 import re
 import pandas as pd
+from fake_useragent import UserAgent
 
 
 def extract_paragraphs(content):
@@ -33,9 +34,11 @@ def process(text):
 def extract(links, session):
     successful_links = []
     link_content = []
+    useragent = UserAgent()
     for link in links:
         try:
-            response = session.get(link, headers={"User-Agent": "Mozilla/5.0"})
+            response = session.get(
+                link, headers={'User-Agent': useragent.random})
             content = extract_paragraphs(response.text)
             successful_links.append(link)
             link_content.append(process(content))

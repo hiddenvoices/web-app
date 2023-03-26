@@ -36,22 +36,26 @@ class Scrape(APIView):
 class Extract(APIView):
     def post(self, request) -> Response:
         name = request.data['name']
+        # of the form [{text, source}, {text, source} ...]
         content = request.data['content']
-        instruction = f'Generate triplets of the form {{object, verb, predicate}} on {name} from the text above.'
-        logger.info(f'GENERATING TRIPLETS FOR {name.upper()}')
+        logger.info(f'GENERATING FACTOIDS FOR {name.upper()}')
+        instruction = f'Generate information on {name} in the following format:\nName: {name}'
         openai.api_key = API_KEY
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=f'{content}\n{instruction}',
-            temperature=0.7,
-            max_tokens=256,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0
-        )
-        triples = response['choices'][0]['text'].strip()
-        triples = self.__format_triples(triples)
-        return Response(data={'triples': triples}, status=status.HTTP_200_OK)
+        response = []
+        for item in content:
+            text = item['text']
+            resp = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "user", "content": f'{text}\n{instruction}'}
+                ]
+            )
+            factoids = resp['choices'][0]['message']['content'].strip()
+            response.append({
+                'text': factoids,
+                'source': item['source']
+            })
+        return Response(data=response, status=status.HTTP_200_OK)
 
     def __format_triples(self, triples) -> str:
         stop_words = set(stopwords.words('english'))
@@ -69,18 +73,20 @@ class Extract(APIView):
 class Summarize(APIView):
     def post(self, request) -> Response:
         name = request.data['name']
-        triples = request.data['triples']
-        instruction = f'Summarize information about {name} from the triples above.'
+        factoids = request.data['content']
+        content = []
+        for i, factoid in enumerate(factoids, start=1):
+            content.append(
+                f"{i}. Factoids:-\n{factoid['text']}\n{i}. Source:- {factoid['source']}")
+        content = '\n'.join(content)
+        instruction = f'Generate a biography on {name} in Wikipedia format using the factoids above with inline citations from the mentioned sources'
         logger.info(f'SUMMARIZING INFORMATION FOR {name.upper()}')
         openai.api_key = API_KEY
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=f'{triples}\n{instruction}',
-            temperature=0.7,
-            max_tokens=256,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "user", "content": f'Name:{name}\n{factoids}\n{instruction}'}
+            ]
         )
-        content = response['choices'][0]['text'].strip()
+        content = response['choices'][0]['message']['content'].strip()
         return Response(data={'content': content}, status=status.HTTP_200_OK)

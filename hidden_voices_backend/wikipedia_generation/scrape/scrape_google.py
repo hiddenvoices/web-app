@@ -24,7 +24,7 @@ def scrape_google_news(name, quotes=False):
     return links
 
 
-def property_searching(name, prop, quotes=False, num=2, stop=2, pause=5):
+def property_searching(name, prop, quotes=False, num=2, stop=2, pause=15):
     query = name if not quotes else f'"{name}"'
     query = query + f' {prop}'
     results = []
