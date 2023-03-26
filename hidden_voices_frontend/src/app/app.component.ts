@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { WikipediaGenerationService } from './core/services/wikipedia-generation.service';
 import { MenuItem } from 'primeng/api';
 
 @Component({

@@ -76,24 +76,18 @@
             cols="30"
             pInputTextarea
             style="resize: none"
-            readonly
-            >{{ item.text }}</textarea
-          >
+            [(ngModel)]="item.text"
+          ></textarea>
         </td>
-        <td>{{ item.source }}</td>
+        <td>
+          <input type="text" pInputText [(ngModel)]="item.source" required />
+        </td>
         <td>
           <button
             pButton
             pRipple
-            icon="pi pi-pencil"
-            class="p-button-rounded p-button-success p-mr-2"
-            (click)="editItem(item)"
-          ></button>
-          <button
-            pButton
-            pRipple
             icon="pi pi-trash"
-            class="p-button-rounded p-button-warning"
+            class="p-button-rounded p-button-danger"
             (click)="deleteItem(item)"
             style="margin-left: 5px"
           ></button>
@@ -102,55 +96,3 @@
     </ng-template>
   </p-table>
 </div>
-
-<p-dialog
-  [(visible)]="itemDialog"
-  [style]="{ width: '450px' }"
-  header="Item Details"
-  [modal]="true"
-  styleClass="p-fluid"
->
-  <ng-template pTemplate="content">
-    <div class="p-field">
-      <label for="text">Text</label>
-      <textarea
-        id="text"
-        pInputTextarea
-        [(ngModel)]="item.text"
-        required
-        rows="3"
-        cols="20"
-        [autoResize]="true"
-      ></textarea>
-    </div>
-    <div class="p-field">
-      <label for="source">Source</label>
-      <input
-        type="text"
-        pInputText
-        id="source"
-        [(ngModel)]="item.source"
-        required
-      />
-    </div>
-  </ng-template>
-
-  <ng-template pTemplate="footer">
-    <button
-      pButton
-      pRipple
-      label="Cancel"
-      icon="pi pi-times"
-      class="p-button-text"
-      (click)="hideDialog()"
-    ></button>
-    <button
-      pButton
-      pRipple
-      label="Save"
-      icon="pi pi-check"
-      class="p-button-text"
-      (click)="saveItem()"
-    ></button>
-  </ng-template>
-</p-dialog>

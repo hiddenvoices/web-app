@@ -1,0 +1,15 @@
+.spinner {
+  position: absolute;
+  left: 47%;
+  top: 40%;
+  z-index: 100;
+}
+
+.overlay {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
+  z-index: 99;
+  backdrop-filter: blur(1px);
+}

@@ -1,3 +1,8 @@
+<ng-container *ngIf="activeServices">
+  <div class="overlay"></div>
+  <p-progressSpinner class="spinner" strokeWidth="4"></p-progressSpinner>
+</ng-container>
+
 <p-carousel [value]="components" [numVisible]="2" [numScroll]="1">
   <ng-template pTemplate="header">
     <div style="margin-left: 60px; margin-top: 10px">

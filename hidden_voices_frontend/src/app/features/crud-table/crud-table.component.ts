@@ -18,7 +18,6 @@ import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 export class CrudTableComponent implements OnInit, OnChanges {
   @Input() items: any[] = [];
   @Output() itemsChange = new EventEmitter<any>();
-  itemDialog: boolean = false;
   item: any;
   selectedItems: any[] | null = null;
   submitted: boolean = false;
@@ -79,9 +78,9 @@ export class CrudTableComponent implements OnInit, OnChanges {
   }
 
   openNew() {
-    this.item = {};
-    this.submitted = false;
-    this.itemDialog = true;
+    this.item = { text: '', source: '', id: this.createId() };
+    this.items.push(this.item);
+    this.itemsChange.emit(this.items);
   }
 
   deleteSelectedItems() {
@@ -105,12 +104,6 @@ export class CrudTableComponent implements OnInit, OnChanges {
     });
   }
 
-  editItem(item: any) {
-    this.item = { ...item };
-    this.itemDialog = true;
-    this.itemsChange.emit(this.items);
-  }
-
   deleteItem(item: any) {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the item?',
@@ -128,41 +121,6 @@ export class CrudTableComponent implements OnInit, OnChanges {
         this.itemsChange.emit(this.items);
       },
     });
-  }
-
-  hideDialog() {
-    this.itemDialog = false;
-    this.submitted = false;
-  }
-
-  saveItem() {
-    this.submitted = true;
-
-    if (this.item.text.trim()) {
-      if (this.item.id) {
-        this.items[this.findIndexById(this.item.id)] = this.item;
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Item Updated',
-          life: 3000,
-        });
-      } else {
-        this.item.id = this.createId();
-        this.items.push(this.item);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Item Created',
-          life: 3000,
-        });
-      }
-
-      this.items = [...this.items];
-      this.itemDialog = false;
-      this.item = {};
-      this.itemsChange.emit(this.items);
-    }
   }
 
   findIndexById(id: string): number {

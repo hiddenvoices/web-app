@@ -30,9 +30,11 @@ export class WikipediaGenerationService {
       name: name,
       content: content,
     };
+    this.incrementServiceCounter();
     this.httpClient.post(`${this.BACKEND_URL}/extract/`, body).subscribe({
       next: (response) => this.factoids.next(response),
-      error: (error) => console.log(error),
+      error: (error) => this.decrementServiceCounter(),
+      complete: () => this.decrementServiceCounter(),
     });
   }
 
@@ -41,11 +43,11 @@ export class WikipediaGenerationService {
       name: name,
       content: factoids,
     };
+    this.incrementServiceCounter();
     this.httpClient.post(`${this.BACKEND_URL}/summarize/`, body).subscribe({
-      next: (response: any) => {
-        this.article.next(response['content']);
-      },
-      error: (error) => console.log(error),
+      next: (response: any) => this.article.next(response['content']),
+      error: (error) => this.decrementServiceCounter(),
+      complete: () => this.decrementServiceCounter(),
     });
   }
 
