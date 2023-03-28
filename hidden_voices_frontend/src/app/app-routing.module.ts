@@ -6,6 +6,7 @@ import { ScrapeComponent } from './features/scrape/scrape.component';
 const routes: Routes = [
   { path: 'scrape', component: ScrapeComponent },
   { path: 'generate', component: GenerateComponent },
+  { path: '**', redirectTo: '/scrape', pathMatch: 'full' },
 ];
 
 @NgModule({
