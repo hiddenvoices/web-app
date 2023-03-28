@@ -6,23 +6,32 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class WikipediaGenerationService {
-  private serviceCounter: BehaviorSubject<number>;
+  private scrapeCounter: BehaviorSubject<number>;
+  private generateCounter: BehaviorSubject<number>;
+  public scrapedArticles: BehaviorSubject<any>;
   public factoids: BehaviorSubject<any>;
   public article: BehaviorSubject<string>;
 
   constructor(private httpClient: HttpClient) {
-    this.serviceCounter = new BehaviorSubject<number>(0);
+    this.generateCounter = new BehaviorSubject<number>(0);
+    this.scrapeCounter = new BehaviorSubject<number>(0);
+    this.scrapedArticles = new BehaviorSubject<any>([]);
     this.factoids = new BehaviorSubject<any>([]);
     this.article = new BehaviorSubject<string>('');
   }
 
-  BACKEND_URL = 'http://localhost:8000/backend/wiki';
+  BACKEND_URL = 'https://130.250.170.17/backend/wiki';
 
   public scrape(name: string) {
     const body = {
       name: name,
     };
-    return this.httpClient.post(`${this.BACKEND_URL}/scrape/`, body);
+    this.incrementScrapeCounter();
+    this.httpClient.post(`${this.BACKEND_URL}/scrape/`, body).subscribe({
+      next: (response) => this.scrapedArticles.next(response),
+      error: (error) => this.decrementScrapeCounter(),
+      complete: () => this.decrementScrapeCounter(),
+    });
   }
 
   public extract(name: string, content: any) {
@@ -30,11 +39,11 @@ export class WikipediaGenerationService {
       name: name,
       content: content,
     };
-    this.incrementServiceCounter();
+    this.incrementGenerateCounter();
     this.httpClient.post(`${this.BACKEND_URL}/extract/`, body).subscribe({
       next: (response) => this.factoids.next(response),
-      error: (error) => this.decrementServiceCounter(),
-      complete: () => this.decrementServiceCounter(),
+      error: (error) => this.decrementGenerateCounter(),
+      complete: () => this.decrementGenerateCounter(),
     });
   }
 
@@ -43,23 +52,35 @@ export class WikipediaGenerationService {
       name: name,
       content: factoids,
     };
-    this.incrementServiceCounter();
+    this.incrementGenerateCounter();
     this.httpClient.post(`${this.BACKEND_URL}/summarize/`, body).subscribe({
       next: (response: any) => this.article.next(response['content']),
-      error: (error) => this.decrementServiceCounter(),
-      complete: () => this.decrementServiceCounter(),
+      error: (error) => this.decrementGenerateCounter(),
+      complete: () => this.decrementGenerateCounter(),
     });
   }
 
-  public incrementServiceCounter(): void {
-    this.serviceCounter.next(this.serviceCounter.value + 1);
+  public incrementGenerateCounter(): void {
+    this.generateCounter.next(this.generateCounter.value + 1);
   }
 
-  public decrementServiceCounter(): void {
-    this.serviceCounter.next(this.serviceCounter.value - 1);
+  public decrementGenerateCounter(): void {
+    this.generateCounter.next(this.generateCounter.value - 1);
   }
 
-  public getServiceCounter(): Observable<number> {
-    return this.serviceCounter.asObservable();
+  public getGenerateCounter(): Observable<number> {
+    return this.generateCounter.asObservable();
+  }
+
+  public incrementScrapeCounter(): void {
+    this.scrapeCounter.next(this.scrapeCounter.value + 1);
+  }
+
+  public decrementScrapeCounter(): void {
+    this.scrapeCounter.next(this.scrapeCounter.value - 1);
+  }
+
+  public getScrapeCounter(): Observable<number> {
+    return this.scrapeCounter.asObservable();
   }
 }

@@ -17,6 +17,7 @@ import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 })
 export class CrudTableComponent implements OnInit, OnChanges {
   @Input() items: any[] = [];
+  @Input() cols: number = 30;
   @Output() itemsChange = new EventEmitter<any>();
   item: any;
   selectedItems: any[] | null = null;

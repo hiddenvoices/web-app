@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { WikipediaGenerationService } from 'src/app/core/services/wikipedia-generation.service';
 
 @Component({
   selector: 'app-scrape',
@@ -6,13 +7,20 @@ import { Component } from '@angular/core';
   styleUrls: ['./scrape.component.css'],
 })
 export class ScrapeComponent {
-  /*
-    TODO:
-      - Have input for POI name
-      - Have scrape button
-      - Once scraped, populate table with columns:
-        1. Document
-        2. Source
-      - Have export to CSV
-  */
+  name: string = '';
+  activeServices: number = 0;
+  items: any[] = [];
+
+  constructor(private wikiService: WikipediaGenerationService) {}
+
+  ngOnInit() {
+    this.wikiService.getScrapeCounter().subscribe((value) => {
+      this.activeServices = value;
+    });
+    this.wikiService.scrapedArticles.subscribe((data) => (this.items = data));
+  }
+
+  scrapeContent() {
+    this.wikiService.scrape(this.name);
+  }
 }

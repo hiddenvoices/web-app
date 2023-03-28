@@ -18,7 +18,7 @@ export class GenerateComponent {
   constructor(private wikipediaGenerationService: WikipediaGenerationService) {}
 
   ngOnInit() {
-    this.wikipediaGenerationService.getServiceCounter().subscribe((value) => {
+    this.wikipediaGenerationService.getGenerateCounter().subscribe((value) => {
       this.activeServices = value;
     });
   }

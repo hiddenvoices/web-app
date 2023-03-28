@@ -1,1 +1,14 @@
-<p>scrape works!</p>
+<ng-container *ngIf="activeServices">
+  <div class="overlay"></div>
+  <p-progressSpinner class="spinner" strokeWidth="4"></p-progressSpinner>
+</ng-container>
+
+<div style="margin-top: 10px; margin-bottom: 10px">
+  <input type="text" pInputText placeholder="Name" [(ngModel)]="name" />
+  <p-button
+    label="SCRAPE CONTENT"
+    (click)="scrapeContent()"
+    style="margin-left: 20px"
+  ></p-button>
+</div>
+<app-crud-table [(items)]="items" [cols]="100"></app-crud-table>
