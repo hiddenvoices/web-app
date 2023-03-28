@@ -29,8 +29,7 @@ class Scrape(APIView):
         ranked_df = get_ranked_documents(content_df, name, group_count=None)
         scraped_content = get_filtered_content(ranked_df)
         logger.info(f'SCRAPING COMPLETE')
-
-        return Response(data={'name': name, 'content': scraped_content}, status=status.HTTP_200_OK)
+        return Response(data=scraped_content, status=status.HTTP_200_OK)
 
 
 class Extract(APIView):

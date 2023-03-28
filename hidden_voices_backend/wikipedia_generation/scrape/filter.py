@@ -9,7 +9,7 @@ def count_words(s):
 
 
 def filter_by_length(df, threshold):
-    document_words = np.array([count_words(d) for d in df['documents']])
+    document_words = np.array([count_words(d) for d in df['text']])
     return df.iloc[document_words >= threshold].reset_index(drop=True)
 
 
@@ -21,7 +21,7 @@ def get_similarity(corpus):
 
 
 def discard_similar(df, threshold):
-    pairwise_similarity = get_similarity(list(df['documents']))
+    pairwise_similarity = get_similarity(list(df['text']))
     n = len(pairwise_similarity)
     discard_indices = set()
     for i in range(n):
@@ -43,6 +43,6 @@ def filter_redundant_documents(df):
 def get_filtered_content(df):
     # TODO: SEND JSON [{content, link}...]
     filtered_df = filter_redundant_documents(df)
-    # content = '\n'.join(filtered_df['documents'])
+    # content = '\n'.join(filtered_df['text'])
     # content = re.sub(r'\n+', '\n', content).strip()
     return filtered_df.to_dict(orient='records')

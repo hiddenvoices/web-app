@@ -35,8 +35,8 @@ def rank_link_documents(name, link, documents):
         else:
             df_ranked[n] = [0 for _ in range(len(documents))]
 
-    df_ranked['documents'] = documents
-    df_ranked['link'] = [link for _ in range(len(documents))]
+    df_ranked['text'] = documents
+    df_ranked['source'] = [link for _ in range(len(documents))]
     return df_ranked
 
 
