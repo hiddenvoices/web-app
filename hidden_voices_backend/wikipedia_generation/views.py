@@ -16,19 +16,22 @@ import openai
 class Scrape(APIView):
     def post(self, request) -> Response:
         name = request.data['name']
-        logger.info(f'SCRAPING STARTED FOR {name}')
+        institute = request.data['institute']
+        search_entity = f'{name} {institute}'
+
+        logger.info('SCRAPING STARTED FOR %s', name)
         session = requests.Session()
 
-        links = scrape_links(name, quotes=True)
-        logger.info(f'GOOGLE LINKS FETCHED')
+        links = scrape_links(search_entity, quotes=True)
+        logger.info('GOOGLE LINKS FETCHED')
 
         content_df = extract(links, session)
         session.close()
-        logger.info(f'WEB EXTRACTION COMPLETE')
+        logger.info('WEB EXTRACTION COMPLETE')
 
         ranked_df = get_ranked_documents(content_df, name, group_count=None)
         scraped_content = get_filtered_content(ranked_df)
-        logger.info(f'SCRAPING COMPLETE')
+        logger.info('SCRAPING COMPLETE')
         return Response(data=scraped_content, status=status.HTTP_200_OK)
 
 
