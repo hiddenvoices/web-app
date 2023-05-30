@@ -19,7 +19,7 @@ class Scrape(APIView):
         institute = request.data['institute']
         search_entity = f'{name} {institute}'
 
-        logger.info('SCRAPING STARTED FOR %s', name)
+        logger.info('SCRAPING STARTED FOR %s', search_entity)
         session = requests.Session()
 
         links = scrape_links(search_entity, quotes=True)
@@ -50,7 +50,8 @@ class Extract(APIView):
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "user", "content": f'{text}\n{instruction}'}
-                ]
+                ],
+                temperature=0,
             )
             factoids = resp['choices'][0]['message']['content'].strip()
             response.append({
@@ -88,7 +89,8 @@ class Summarize(APIView):
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "user", "content": f'Name:{name}\n{factoids}\n{instruction}'}
-            ]
+            ],
+            temperature=0,
         )
         content = response['choices'][0]['message']['content'].strip()
         return Response(data={'content': content}, status=status.HTTP_200_OK)
