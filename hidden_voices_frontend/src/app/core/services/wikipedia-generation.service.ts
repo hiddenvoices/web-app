@@ -20,7 +20,7 @@ export class WikipediaGenerationService {
     this.article = new BehaviorSubject<string>('');
   }
 
-  BACKEND_URL = 'https://130.250.170.11/backend/wiki';
+  BACKEND_URL = 'https://msc1-130-250-170-11.cloud.denvrdata.com/backend/wiki';
 
   public scrape(name: string) {
     const body = {
