@@ -8,6 +8,7 @@ import { WikipediaGenerationService } from 'src/app/core/services/wikipedia-gene
 })
 export class ScrapeComponent {
   name: string = '';
+  institute: string = '';
   activeServices: number = 0;
   items: any[] = [];
 
@@ -21,6 +22,6 @@ export class ScrapeComponent {
   }
 
   scrapeContent() {
-    this.wikiService.scrape(this.name);
+    this.wikiService.scrape(this.name, this.institute);
   }
 }

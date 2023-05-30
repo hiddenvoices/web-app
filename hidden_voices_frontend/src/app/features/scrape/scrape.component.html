@@ -4,7 +4,21 @@
 </ng-container>
 
 <div style="margin-top: 10px; margin-bottom: 10px">
-  <input type="text" pInputText placeholder="Name" [(ngModel)]="name" />
+  <input
+    type="text"
+    pInputText
+    placeholder="Name"
+    [(ngModel)]="name"
+    required
+  />
+  <input
+    type="text"
+    pInputText
+    placeholder="Institute"
+    [(ngModel)]="institute"
+    style="margin-left: 10px"
+    required
+  />
   <p-button
     label="SCRAPE CONTENT"
     (click)="scrapeContent()"
