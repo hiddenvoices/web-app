@@ -78,7 +78,7 @@ class Summarize(APIView):
             content.append(
                 f"{i}. Factoids:-\n{factoid['text']}\n{i}. Source:- {factoid['source']}")
         content = '\n'.join(content)
-        instruction = f'Generate a biography on {name} in Wikipedia format using the factoids above with inline citations from the mentioned sources'
+        instruction = f'Generate a biography on {name} in Wikipedia format using the factoids above with inline citations from the mentioned sources. Strictly generate content section-wise and return the output in wiki markup format only.'
         logger.info(f'SUMMARIZING INFORMATION FOR {name.upper()}')
         openai.api_key = API_KEY
         response = openai.ChatCompletion.create(
