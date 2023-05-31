@@ -1,5 +1,6 @@
 from serpapi import GoogleSearch
 from googlesearch import search
+from wikipedia_generation.utils import logger
 
 PROPERTIES = ['full name', 'date of birth', 'place of birth', 'date of death', 'place of death', 'nationality', 'citizenship', 'education',
               'occupation', 'years active', 'known for', 'field', 'work institutions', 'sub-specialities', 'research', 'notable works', 'website', 'awards']
@@ -30,6 +31,7 @@ def property_searching(name, prop, quotes=False, num=2, stop=2, pause=15):
     results = []
     for result in search(query, tld="com", num=num, stop=stop, pause=pause):
         results.append(result)
+    logger.info('LINKS FOR PROPERTY %s FETCHED FOR ENTITY %s', prop, name)
     return results
 
 
@@ -49,6 +51,7 @@ def discard_skipped_websites(results):
 
 def scrape_links(name, quotes=False):
     results = scrape_google_news(name, quotes)
+    logger.info('SERPAPI LINK FETCHING COMPLETE')
     property_results = [property_searching(
         name, prop, quotes) for prop in PROPERTIES]
     for result in property_results:

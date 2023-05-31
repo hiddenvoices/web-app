@@ -15,24 +15,29 @@ import openai
 
 class Scrape(APIView):
     def post(self, request) -> Response:
-        name = request.data['name']
-        institute = request.data['institute']
-        search_entity = f'{name} {institute}'
+        try:
+            name = request.data['name']
+            institute = request.data['institute']
+            search_entity = f'{name} {institute}'
 
-        logger.info('SCRAPING STARTED FOR %s', search_entity)
-        session = requests.Session()
+            logger.info('SCRAPING STARTED FOR %s', search_entity)
+            session = requests.Session()
 
-        links = scrape_links(search_entity, quotes=True)
-        logger.info('GOOGLE LINKS FETCHED')
+            links = scrape_links(search_entity, quotes=True)
+            logger.info('GOOGLE LINKS FETCHED')
 
-        content_df = extract(links, session)
-        session.close()
-        logger.info('WEB EXTRACTION COMPLETE')
+            content_df = extract(links, session)
+            session.close()
+            logger.info('WEB EXTRACTION COMPLETE')
 
-        ranked_df = get_ranked_documents(content_df, name, group_count=None)
-        scraped_content = get_filtered_content(ranked_df)
-        logger.info('SCRAPING COMPLETE')
-        return Response(data=scraped_content, status=status.HTTP_200_OK)
+            ranked_df = get_ranked_documents(
+                content_df, name, group_count=None)
+            scraped_content = get_filtered_content(ranked_df)
+            logger.info('SCRAPING COMPLETE')
+            return Response(data=scraped_content, status=status.HTTP_200_OK)
+        except Exception as exc:
+            logger.error(exc)
+            return Response(data=f'ERROR: {exc}', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class Extract(APIView):

@@ -9,7 +9,8 @@
     pInputText
     placeholder="Name"
     [(ngModel)]="name"
-    required
+    pTooltip="Mandatory"
+    tooltipPosition="bottom"
   />
   <input
     type="text"
@@ -17,7 +18,8 @@
     placeholder="Institute"
     [(ngModel)]="institute"
     style="margin-left: 10px"
-    required
+    pTooltip="Mandatory"
+    tooltipPosition="bottom"
   />
   <p-button
     label="SCRAPE CONTENT"

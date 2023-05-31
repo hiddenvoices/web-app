@@ -36,6 +36,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
     InputNumberModule,
     ConfirmDialogModule,
     NgxCsvParserModule,
+    TooltipModule,
   ],
   providers: [MessageService, ConfirmationService],
   bootstrap: [AppComponent],

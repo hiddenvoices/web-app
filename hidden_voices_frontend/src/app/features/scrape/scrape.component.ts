@@ -22,6 +22,10 @@ export class ScrapeComponent {
   }
 
   scrapeContent() {
+    if (this.name == '' || this.institute == '') {
+      alert('All fields must be set for scraping.');
+      return;
+    }
     this.wikiService.scrape(this.name, this.institute);
   }
 }
