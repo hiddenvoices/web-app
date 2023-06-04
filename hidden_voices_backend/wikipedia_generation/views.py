@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from wikipedia_generation.environment import API_KEY
-from wikipedia_generation.scrape.scrape_google import scrape_links
+from wikipedia_generation.scrape.scrape_web import scrape_links
 from wikipedia_generation.scrape.extract import extract
 from wikipedia_generation.scrape.rank import get_ranked_documents
 from wikipedia_generation.scrape.filter import get_filtered_content
@@ -24,7 +24,7 @@ class Scrape(APIView):
             session = requests.Session()
 
             links = scrape_links(search_entity, quotes=True)
-            logger.info('GOOGLE LINKS FETCHED')
+            logger.info('LINKS FETCHED')
 
             content_df = extract(links, session)
             session.close()
@@ -64,18 +64,6 @@ class Extract(APIView):
                 'source': item['source']
             })
         return Response(data=response, status=status.HTTP_200_OK)
-
-    def __format_triples(self, triples) -> str:
-        stop_words = set(stopwords.words('english'))
-        sentences = triples.split('\n')
-
-        filtered_content = []
-        for sentence in sentences:
-            word_tokens = word_tokenize(sentence)
-            filtered_sentence = [
-                w for w in word_tokens if w.lower() not in stop_words]
-            filtered_content.append(' '.join(filtered_sentence))
-        return '\n'.join(filtered_content)
 
 
 class Summarize(APIView):

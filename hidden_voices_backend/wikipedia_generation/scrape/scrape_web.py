@@ -1,16 +1,17 @@
+import requests
 from serpapi import GoogleSearch
 from googlesearch import search
+from wikipedia_generation.scrape.constants import AZURE_API_KEY, GOOGLE_API_KEY
 from wikipedia_generation.utils import logger
 
-PROPERTIES = ['full name', 'date of birth', 'place of birth', 'date of death', 'place of death', 'nationality', 'citizenship', 'education',
-              'occupation', 'years active', 'known for', 'field', 'work institutions', 'sub-specialities', 'research', 'notable works', 'website', 'awards']
+PROPERTIES = ['full name', 'date of birth',]
 SKIPPED_WEBSITES = ['twitter.com', 'instagram.com', 'wikipedia',
                     'facebook.com', 'fb.com', 'linkedin.com', 'youtube.com', '.pdf']
 
 
 def scrape_google_news(name, quotes=False):
     params = {
-        'api_key': '42634eaddcbab45eb93b66c63a13c110b28c1e0c2da77c4443eda8f0090d2e56',
+        'api_key': GOOGLE_API_KEY,
         'engine': 'google',
         'q': name if not quotes else f'"{name}"',
         'gl': 'in',
@@ -35,6 +36,27 @@ def property_searching(name, prop, quotes=False, num=2, stop=2, pause=15):
     return results
 
 
+def scrape_bing(name):
+    base_url = 'https://api.bing.microsoft.com/v7.0/search'
+    headers = {'Ocp-Apim-Subscription-Key': AZURE_API_KEY}
+
+    params = {
+        'q': name,
+        'count': 10,
+        'offset': 0,
+        'mkt': 'en-US',
+        'safeSearch': 'Moderate'
+    }
+
+    response = requests.get(base_url, headers=headers, params=params)
+    data = response.json()
+    logger.info('BING SCRAPING COMPLETE')
+    results = [result['url'] for result in data['webPages']
+               ['value']] if 'webPages' in data else []
+
+    return results
+
+
 def discard_skipped_websites(results):
     filtered_results = []
     for result in results:
@@ -56,5 +78,7 @@ def scrape_links(name, quotes=False):
         name, prop, quotes) for prop in PROPERTIES]
     for result in property_results:
         results.extend(result)
+    results.extend(scrape_bing(name))
     results = list(set(results))
+    logger.info(results)
     return discard_skipped_websites(results)
