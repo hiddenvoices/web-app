@@ -19,7 +19,7 @@ def split_to_sentences(text, group_count=1):
 def apply_tf_idf(documents):
     vectorizer = TfidfVectorizer()
     vectors = vectorizer.fit_transform(documents)
-    feature_names = vectorizer.get_feature_names()
+    feature_names = vectorizer.get_feature_names_out()
     dense = vectors.todense()
     denselist = dense.tolist()
     df = pd.DataFrame(denselist, columns=feature_names)

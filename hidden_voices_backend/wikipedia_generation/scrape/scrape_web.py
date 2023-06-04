@@ -4,7 +4,9 @@ from googlesearch import search
 from wikipedia_generation.scrape.constants import AZURE_API_KEY, GOOGLE_API_KEY
 from wikipedia_generation.utils import logger
 
-PROPERTIES = ['full name', 'date of birth',]
+
+PROPERTIES = ['full name', 'date of birth', 'place of birth', 'date of death', 'place of death', 'nationality', 'citizenship', 'education',
+              'occupation', 'years active', 'known for', 'field', 'work institutions', 'sub-specialities', 'research', 'notable works', 'website', 'awards']
 SKIPPED_WEBSITES = ['twitter.com', 'instagram.com', 'wikipedia',
                     'facebook.com', 'fb.com', 'linkedin.com', 'youtube.com', '.pdf']
 
@@ -80,5 +82,4 @@ def scrape_links(name, quotes=False):
         results.extend(result)
     results.extend(scrape_bing(name))
     results = list(set(results))
-    logger.info(results)
     return discard_skipped_websites(results)
