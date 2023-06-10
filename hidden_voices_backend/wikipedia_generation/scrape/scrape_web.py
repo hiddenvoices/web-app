@@ -1,12 +1,14 @@
 import requests
 from serpapi import GoogleSearch
 from googlesearch import search
-from wikipedia_generation.scrape.constants import AZURE_API_KEY, GOOGLE_API_KEY
+from wikipedia_generation.environment import GOOGLE_API_KEY, AZURE_API_KEY
 from wikipedia_generation.utils import logger
 
 
-PROPERTIES = ['full name', 'date of birth', 'place of birth', 'date of death', 'place of death', 'nationality', 'citizenship', 'education',
-              'occupation', 'years active', 'known for', 'field', 'work institutions', 'sub-specialities', 'research', 'notable works', 'website', 'awards']
+# PROPERTIES = ['full name', 'date of birth', 'place of birth', 'date of death', 'place of death', 'nationality', 'citizenship', 'education',
+#               'occupation', 'years active', 'known for', 'field', 'work institutions', 'sub-specialities', 'research', 'notable works', 'website', 'awards']
+# TODO: USE PROPERTIES WHEN RUNNING A BACKGROUND JOB
+PROPERTIES = ['']
 SKIPPED_WEBSITES = ['twitter.com', 'instagram.com', 'wikipedia',
                     'facebook.com', 'fb.com', 'linkedin.com', 'youtube.com', '.pdf']
 

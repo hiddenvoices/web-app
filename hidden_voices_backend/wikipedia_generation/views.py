@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from wikipedia_generation.environment import API_KEY
+from wikipedia_generation.environment import OPEN_API_KEY
 from wikipedia_generation.scrape.scrape_web import scrape_links
 from wikipedia_generation.scrape.extract import extract
 from wikipedia_generation.scrape.rank import get_ranked_documents
@@ -47,7 +47,7 @@ class Extract(APIView):
         content = request.data['content']
         logger.info(f'GENERATING FACTOIDS FOR {name.upper()}')
         instruction = f'Generate information on {name} in the following format:\nName: {name}'
-        openai.api_key = API_KEY
+        openai.api_key = OPEN_API_KEY
         response = []
         for item in content:
             text = item['text']
@@ -77,7 +77,7 @@ class Summarize(APIView):
         content = '\n'.join(content)
         instruction = f'Generate a biography on {name} in Wikipedia format using the factoids above with inline citations from the mentioned sources. Strictly generate content section-wise and return the output in wiki markup format only.'
         logger.info(f'SUMMARIZING INFORMATION FOR {name.upper()}')
-        openai.api_key = API_KEY
+        openai.api_key = OPEN_API_KEY
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
