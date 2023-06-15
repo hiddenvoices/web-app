@@ -19,6 +19,7 @@ export class ScrapeComponent {
       this.activeServices = value;
     });
     this.wikiService.scrapedArticles.subscribe((data) => (this.items = data));
+    this.wikiService.name.subscribe((data) => (this.name = data));
   }
 
   scrapeContent() {
@@ -27,5 +28,9 @@ export class ScrapeComponent {
       return;
     }
     this.wikiService.scrape(this.name, this.institute);
+  }
+
+  updateName() {
+    this.wikiService.name.next(this.name);
   }
 }

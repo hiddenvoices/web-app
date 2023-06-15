@@ -17,6 +17,10 @@ export class ScrapedTextComponent implements OnInit {
   }
 
   generateFactoids() {
+    if (this.name == '') {
+      alert('Name must be set before generating factoids.');
+      return;
+    }
     this.wikiService.extract(this.name, this.items);
   }
 }

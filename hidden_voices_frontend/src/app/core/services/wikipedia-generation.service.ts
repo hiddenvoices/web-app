@@ -11,6 +11,7 @@ export class WikipediaGenerationService {
   public scrapedArticles: BehaviorSubject<any>;
   public factoids: BehaviorSubject<any>;
   public article: BehaviorSubject<string>;
+  public name: BehaviorSubject<string>;
 
   constructor(private httpClient: HttpClient) {
     this.generateCounter = new BehaviorSubject<number>(0);
@@ -18,9 +19,10 @@ export class WikipediaGenerationService {
     this.scrapedArticles = new BehaviorSubject<any>([]);
     this.factoids = new BehaviorSubject<any>([]);
     this.article = new BehaviorSubject<string>('');
+    this.name = new BehaviorSubject<string>('');
   }
 
-  BACKEND_URL = 'https://msc1-130-250-170-11.cloud.denvrdata.com/backend/wiki';
+  BACKEND_URL = 'http://127.0.0.1:8000/backend/wiki';
 
   public scrape(name: string, institute: string) {
     const body = {

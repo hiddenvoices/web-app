@@ -21,5 +21,12 @@ export class GenerateComponent {
     this.wikipediaGenerationService.getGenerateCounter().subscribe((value) => {
       this.activeServices = value;
     });
+    this.wikipediaGenerationService.name.subscribe(
+      (data) => (this.name = data)
+    );
+  }
+
+  updateName() {
+    this.wikipediaGenerationService.name.next(this.name);
   }
 }

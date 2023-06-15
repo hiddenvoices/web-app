@@ -6,7 +6,15 @@
 <p-carousel [value]="components" [numVisible]="2" [numScroll]="1">
   <ng-template pTemplate="header">
     <div style="margin-left: 60px; margin-top: 10px">
-      <input type="text" pInputText placeholder="Name" [(ngModel)]="name" />
+      <input
+        type="text"
+        pInputText
+        placeholder="Name"
+        [(ngModel)]="name"
+        (change)="updateName()"
+        pTooltip="Mandatory"
+        tooltipPosition="bottom"
+      />
     </div>
   </ng-template>
   <ng-template let-component pTemplate="item">

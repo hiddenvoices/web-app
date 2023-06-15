@@ -17,6 +17,10 @@ export class FactoidsComponent implements OnInit {
   }
 
   summarizeContent() {
+    if (this.name == '') {
+      alert('Name must be set before summarizing the article.');
+      return;
+    }
     this.wikiService.summarize(this.name, this.items);
   }
 }
