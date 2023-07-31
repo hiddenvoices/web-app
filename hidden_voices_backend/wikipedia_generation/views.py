@@ -11,6 +11,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import requests
 import openai
+import time
 
 
 class Scrape(APIView):
@@ -51,6 +52,7 @@ class Extract(APIView):
         response = []
         for item in content:
             text = item['text']
+            start_time = time.time()
             resp = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=[
@@ -58,11 +60,13 @@ class Extract(APIView):
                 ],
                 temperature=0,
             )
+            end_time = time.time()
             factoids = resp['choices'][0]['message']['content'].strip()
             response.append({
                 'text': factoids,
                 'source': item['source']
             })
+            time.sleep(max(20.1 - (end_time - start_time), 0))
         return Response(data=response, status=status.HTTP_200_OK)
 
 

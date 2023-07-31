@@ -14,6 +14,23 @@ export class GenerateComponent {
     { title: 'SUMMARIZED CONTENT', tag: 'summarized-text' },
   ];
   activeServices: number = 0;
+  responsiveOptions = [
+    {
+      breakpoint: '1199px',
+      numVisible: 1,
+      numScroll: 1,
+    },
+    {
+      breakpoint: '991px',
+      numVisible: 2,
+      numScroll: 1,
+    },
+    {
+      breakpoint: '767px',
+      numVisible: 1,
+      numScroll: 1,
+    },
+  ];
 
   constructor(private wikipediaGenerationService: WikipediaGenerationService) {}
 

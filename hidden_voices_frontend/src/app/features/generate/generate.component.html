@@ -3,7 +3,12 @@
   <p-progressSpinner class="spinner" strokeWidth="4"></p-progressSpinner>
 </ng-container>
 
-<p-carousel [value]="components" [numVisible]="2" [numScroll]="1">
+<p-carousel
+  [value]="components"
+  [numVisible]="2"
+  [numScroll]="1"
+  [responsiveOptions]="responsiveOptions"
+>
   <ng-template pTemplate="header">
     <div style="margin-left: 60px; margin-top: 10px">
       <input
