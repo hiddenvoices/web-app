@@ -6,7 +6,7 @@ from wikipedia_generation.scrape.scrape_web import scrape_links
 from wikipedia_generation.scrape.extract import extract
 from wikipedia_generation.scrape.rank import get_ranked_documents
 from wikipedia_generation.scrape.filter import get_filtered_content
-from wikipedia_generation.utils import logger
+from wikipedia_generation.utils import logger, send_email
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import requests
@@ -19,6 +19,7 @@ class Scrape(APIView):
         try:
             name = request.data['name']
             institute = request.data['institute']
+            email = request.data['email']
             search_entity = f'{name} {institute}'
 
             logger.info('SCRAPING STARTED FOR %s', search_entity)
@@ -35,6 +36,9 @@ class Scrape(APIView):
                 content_df, name, group_count=None)
             scraped_content = get_filtered_content(ranked_df)
             logger.info('SCRAPING COMPLETE')
+
+            send_email(email, name)
+            logger.info('EMAIL SENT TO USER')
             return Response(data=scraped_content, status=status.HTTP_200_OK)
         except Exception as exc:
             logger.error(exc)

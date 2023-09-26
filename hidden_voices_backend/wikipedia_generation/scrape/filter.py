@@ -45,4 +45,5 @@ def get_filtered_content(df):
     filtered_df = filter_redundant_documents(df)
     # content = '\n'.join(filtered_df['text'])
     # content = re.sub(r'\n+', '\n', content).strip()
+    filtered_df.to_csv('data.csv', index=False)
     return filtered_df.to_dict(orient='records')
