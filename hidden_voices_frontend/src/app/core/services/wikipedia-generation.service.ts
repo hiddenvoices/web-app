@@ -24,10 +24,11 @@ export class WikipediaGenerationService {
 
   BACKEND_URL = 'https://msc1-130-250-170-11.cloud.denvrdata.com/backend/wiki';
 
-  public scrape(name: string, institute: string) {
+  public scrape(name: string, institute: string, email: string) {
     const body = {
       name: name,
       institute: institute,
+      email: email,
     };
     this.incrementScrapeCounter();
     this.httpClient.post(`${this.BACKEND_URL}/scrape/`, body).subscribe({

@@ -22,6 +22,15 @@
     pTooltip="Mandatory"
     tooltipPosition="bottom"
   />
+  <input
+    type="email"
+    pInputText
+    placeholder="Email"
+    [(ngModel)]="email"
+    style="margin-left: 10px"
+    pTooltip="Mandatory"
+    tooltipPosition="bottom"
+  />
   <p-button
     label="SCRAPE CONTENT"
     (click)="scrapeContent()"
@@ -29,3 +38,4 @@
   ></p-button>
 </div>
 <app-crud-table [(items)]="items" [cols]="100"></app-crud-table>
+<p-toast></p-toast>
