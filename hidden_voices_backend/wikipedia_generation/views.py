@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from wikipedia_generation.environment import OPEN_API_KEY
+from wikipedia_generation.environment import PPLX_API_KEY
 from wikipedia_generation.scrape.scrape_web import scrape_links
 from wikipedia_generation.scrape.extract import extract
 from wikipedia_generation.scrape.rank import get_ranked_documents
@@ -12,6 +12,7 @@ from nltk.tokenize import word_tokenize
 import requests
 import openai
 import time
+import json
 
 
 class Scrape(APIView):
@@ -37,8 +38,8 @@ class Scrape(APIView):
             scraped_content = get_filtered_content(ranked_df)
             logger.info('SCRAPING COMPLETE')
 
-            send_email(email, name)
-            logger.info('EMAIL SENT TO USER')
+            # send_email(email, name)
+            # logger.info('EMAIL SENT TO USER')
             return Response(data=scraped_content, status=status.HTTP_200_OK)
         except Exception as exc:
             logger.error(exc)
@@ -48,24 +49,35 @@ class Scrape(APIView):
 class Extract(APIView):
     def post(self, request) -> Response:
         name = request.data['name']
+        URL = 'https://api.perplexity.ai/chat/completions'
+        model = 'pplx-7b-chat'
+        headers = {
+            'accept': 'application/json',
+            'content-type': 'application/json',
+            'authorization': f'Bearer {PPLX_API_KEY}'
+        }
         # of the form [{text, source}, {text, source} ...]
         content = request.data['content']
         logger.info(f'GENERATING FACTOIDS FOR {name.upper()}')
         instruction = f'Generate information on {name} in the following format:\nName: {name}'
-        openai.api_key = OPEN_API_KEY
         response = []
         for item in content:
             text = item['text']
             start_time = time.time()
-            resp = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "user", "content": f'{text}\n{instruction}'}
+            payload = {
+                'model': model,
+                'messages': [
+                    {
+                        'role': 'user',
+                        'content': f'{text}\n{instruction}'
+                    }
                 ],
-                temperature=0,
-            )
+                'temperature': 0
+            }
+            resp = requests.post(URL, json=payload, headers=headers)
             end_time = time.time()
-            factoids = resp['choices'][0]['message']['content'].strip()
+            factoids = json.loads(resp.text)[
+                'choices'][0]['message']['content']
             response.append({
                 'text': factoids,
                 'source': item['source']
@@ -78,6 +90,13 @@ class Summarize(APIView):
     def post(self, request) -> Response:
         name = request.data['name']
         factoids = request.data['content']
+        URL = 'https://api.perplexity.ai/chat/completions'
+        model = 'pplx-7b-chat'
+        headers = {
+            'accept': 'application/json',
+            'content-type': 'application/json',
+            'authorization': f'Bearer {PPLX_API_KEY}'
+        }
         content = []
         for i, factoid in enumerate(factoids, start=1):
             content.append(
@@ -85,13 +104,17 @@ class Summarize(APIView):
         content = '\n'.join(content)
         instruction = f'Generate a biography on {name} in Wikipedia format using the factoids above with inline citations from the mentioned sources. Strictly generate content section-wise and return the output in wiki markup format only.'
         logger.info(f'SUMMARIZING INFORMATION FOR {name.upper()}')
-        openai.api_key = OPEN_API_KEY
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": f'Name:{name}\n{factoids}\n{instruction}'}
+        payload = {
+            'model': model,
+            'messages': [
+                {
+                    'role': 'user',
+                    'content': f'Name:{name}\n{factoids}\n{instruction}'
+                }
             ],
-            temperature=0,
-        )
-        content = response['choices'][0]['message']['content'].strip()
+            'temperature': 0
+        }
+        response = requests.post(URL, json=payload, headers=headers)
+        content = json.loads(response.text)[
+            'choices'][0]['message']['content'].strip()
         return Response(data={'content': content}, status=status.HTTP_200_OK)
