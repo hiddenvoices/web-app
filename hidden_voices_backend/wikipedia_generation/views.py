@@ -6,11 +6,8 @@ from wikipedia_generation.scrape.scrape_web import scrape_links
 from wikipedia_generation.scrape.extract import extract
 from wikipedia_generation.scrape.rank import get_ranked_documents
 from wikipedia_generation.scrape.filter import get_filtered_content
-from wikipedia_generation.utils import logger, send_email
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
+from wikipedia_generation.utils import logger, send_email, get_factoid_prompt
 import requests
-import openai
 import time
 import json
 
@@ -38,8 +35,8 @@ class Scrape(APIView):
             scraped_content = get_filtered_content(ranked_df)
             logger.info('SCRAPING COMPLETE')
 
-            # send_email(email, name)
-            # logger.info('EMAIL SENT TO USER')
+            send_email(email, name)
+            logger.info('EMAIL SENT TO USER')
             return Response(data=scraped_content, status=status.HTTP_200_OK)
         except Exception as exc:
             logger.error(exc)
@@ -59,7 +56,6 @@ class Extract(APIView):
         # of the form [{text, source}, {text, source} ...]
         content = request.data['content']
         logger.info(f'GENERATING FACTOIDS FOR {name.upper()}')
-        instruction = f'Generate information on {name} in the following format:\nName: {name}'
         response = []
         for item in content:
             text = item['text']
@@ -69,7 +65,7 @@ class Extract(APIView):
                 'messages': [
                     {
                         'role': 'user',
-                        'content': f'{text}\n{instruction}'
+                        'content': get_factoid_prompt(name, text)
                     }
                 ],
                 'temperature': 0
